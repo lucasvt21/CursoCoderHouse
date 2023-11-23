@@ -6,7 +6,7 @@ const CartWidget = () => {
     return (
         <Button>
             <i className="bi bi-cart-fill"></i>
-            <Badge >9</Badge>
+            <Badge >11</Badge>
         </Button>
     );
 }

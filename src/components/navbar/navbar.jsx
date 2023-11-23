@@ -4,13 +4,14 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import CartWidget from '../cartwidget/cartwidget';
+import CartWidget from '../CartWidget/CartWidget';
+import { Link } from 'react-router-dom';
 
-function NavScrollExample() {
+function NavBar () {
     return (
         <Navbar fixed='top' expand="lg" className="bg-body-tertiary">
             <Container fluid>
-                <Navbar.Brand href="#">Barrera SA</Navbar.Brand>
+                <Navbar.Brand><Link to ="/">Barrera SA</Link></Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <CartWidget />
                 <Navbar.Collapse id="navbarScroll">
@@ -20,13 +21,19 @@ function NavScrollExample() {
                         navbarScroll
                     >
                         <NavDropdown title="Productos" id="navbarScrollingDropdown">
-                            <NavDropdown.Item href="#action3">Computadoras</NavDropdown.Item>
-                            <NavDropdown.Item href="#action4">
-                                Notebooks
+                            <Link to="/category/Monitor"><NavDropdown.Item>
+                                Monitores
                             </NavDropdown.Item>
-                            <NavDropdown.Item href="#action5">
+                            </Link>
+
+                            <Link to="/category/Notebook"><NavDropdown.Item>
+                                Notebook
+                            </NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/Perisfericos"><NavDropdown.Item>
                                 Perisfericos
                             </NavDropdown.Item>
+                            </Link>
                         </NavDropdown>
                     </Nav>
                     <Form className="d-flex">
@@ -36,12 +43,13 @@ function NavScrollExample() {
                             className="me-2"
                             aria-label="search"
                         />
-                        <Button variant="outline-success">Buscar</Button>
+                        <Button variant="primary">Buscar</Button>
                     </Form>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
     );
+
 }
 
-export default NavScrollExample;
+export default NavBar;

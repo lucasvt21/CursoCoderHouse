@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Tilt Neon', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -15,9 +15,57 @@
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
   min-height: 100vh;
-  background-color: rgba(222, 232, 232, 0.415);
+  background-color: #ffffff;
+  margin-top: 2.5rem;
+}
+
+
+h3 {
+margin-top: 1.875rem;
+font-size: 2rem;
+font-weight: bold;
+color: #2f89d7; 
+margin-bottom: 1rem;
+}
+
+button {
+  display: inline-block;
+padding: 10px 20px;
+background-color: #2f89d7;
+color: #fff; 
+font-weight: bold;
+text-decoration: none;
+border-radius: 8px;
+transition: background-color 0.3s ease;
+border: none;
+transition: .5s ease;
+}
+
+button:hover {
+  background-color: #2f89d7; 
+  color: #242424;
+}
+
+.Link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #2f89d7;
+  color: #fff; 
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: 0.5s ease;
+}
+
+.Link:hover { 
+  color: #242424;
+}
+
+label {
+  color: #2f89d7;
+}
+
+input {
+  color: #2f89d7;
 }

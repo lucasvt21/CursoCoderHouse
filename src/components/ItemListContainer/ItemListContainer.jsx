@@ -1,47 +1,64 @@
-import { getProductos } from "../../../asyncMock";
-import { useState, useEffect } from "react"
-import { ItemList } from "../ItemList/ItemList"
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import ItemList from '../ItemList/ItemList';
+import Loader from '../loader/loader';
+import styles from './styles.module.css';
+import { collection, getDocs, query, where } from "firebase/firestore"
+import { db } from "../../firebase/client"
 
-export const ItemListContainer = () => {
+const ItemListContainer = () => {
+  const { category } = useParams();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    const { category } = useParams();
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const productsRef = collection(db, 'products');
+        let productsFiltered;
 
-    const [productos, setProductos] = useState([])
-    const [isLoading, setIsLoading] = useState(true);
+        if (category) {
+          productsFiltered = query(productsRef, where("category", "==", category));
+        } else {
+          productsFiltered = productsRef;
+        }
 
+        const snapshot = await getDocs(productsFiltered);
 
-    useEffect(() => {
-        setIsLoading(true)
-        getProductos()
-            .then(resp => {
-                if (category) {
-                    const productosFilter = resp.filter((producto) => producto.category === category);
-                    
-                    if(productosFilter.length > 0) {
-                        setProductos(productosFilter)
-                    }else {
-                        setProductos(resp);
-                    }
+        setProducts(
+          snapshot.docs.map((doc) => {
+            return { ...doc.data(), id: doc.id }
+          })
+        );
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-                }else {
-                    setProductos(resp);
-                }
-                setIsLoading(false);
-            })
-            .catch((error) => console.log(error));
-        }, [category]);
-    return (
-        <>
-            {isLoading ? <h3>Se estan cargando los productos</h3> : <ItemList productos={productos} />}
-        </>
-    )
-        ;
+    fetchProducts();
+  }, [category]);
 
+  return (
+    <div className={styles.contenedor}>
+      <div>
+      <h3 style={{display: 'flex', justifyContent:'center', marginTop:'40px'}} >{category ? category : 'Todos los productos'}</h3>
+      </div>
+      <div className={styles.container}>
+        <Loader loading={loading} />
+        {products.length === 0 && !loading && (
+          <div>
+            <h3>parece que la categoria no existe</h3>
+            <Link className='Link' to="/"> volver al inicio</Link>
+          </div>
 
-
-}
-
-
+        )}
+        <ItemList products={products} />
+      </div>
+    </div>
+  );
+};
 
 export default ItemListContainer;
+

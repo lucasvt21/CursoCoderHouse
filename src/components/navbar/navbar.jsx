@@ -1,55 +1,65 @@
-import Button from 'react-bootstrap/Button';
+import { useState, useEffect } from 'react';
+import styles from './styles.module.css';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import CartWidget from '../CartWidget/CartWidget';
+import CartWidget from '../CartWidget/cartwidget';
 import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/client";
 
-function NavBar () {
+const NavBar = () => {
+    const [categories, setCategories] = useState([]);
+
+    const fetchCategories = async () => {
+        try {
+            const productsRef = collection(db, 'products');
+            const productsSnapshot = await getDocs(productsRef);
+
+            const uniqueCategories = [];
+
+            productsSnapshot.forEach((doc) => {
+                const productData = doc.data();
+                if (productData.category && !uniqueCategories.includes(productData.category)) {
+                    uniqueCategories.push(productData.category);
+                }
+            });
+
+            setCategories(uniqueCategories);
+        } catch (error) {
+            console.error('Error al obtener categorías', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
     return (
-        <Navbar fixed='top' expand="lg" className="bg-body-tertiary">
-            <Container fluid>
-                <Navbar.Brand><Link to ="/">Barrera SA</Link></Navbar.Brand>
-                <Navbar.Toggle aria-controls="navbarScroll" />
-                <CartWidget />
-                <Navbar.Collapse id="navbarScroll">
-                    <Nav
-                        className="me-auto my-2 my-lg-0"
-                        style={{ maxHeight: '100px' }}
-                        navbarScroll
-                    >
-                        <NavDropdown title="Productos" id="navbarScrollingDropdown">
-                            <Link to="/category/Monitor"><NavDropdown.Item>
-                                Monitores
-                            </NavDropdown.Item>
-                            </Link>
-
-                            <Link to="/category/Notebook"><NavDropdown.Item>
-                                Notebook
-                            </NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/Perisfericos"><NavDropdown.Item>
-                                Perisfericos
-                            </NavDropdown.Item>
-                            </Link>
-                        </NavDropdown>
-                    </Nav>
-                    <Form className="d-flex">
-                        <Form.Control
-                            type="search"
-                            placeholder="Buscar"
-                            className="me-2"
-                            aria-label="search"
-                        />
-                        <Button variant="primary">Buscar</Button>
-                    </Form>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
+        <div>
+            <Navbar className={styles.navbar} fixed="top" expand="lg">
+                <Container fluid>
+                    <Link to="/" className="navbar-brand">
+                        Tienda Barrera S.A
+                    </Link>
+                    <CartWidget />
+                    <Navbar.Toggle aria-controls="navbarScroll" />
+                    <Navbar.Collapse id="navbarScroll">
+                        <Nav className="me-auto my-2 my-lg-0 nav-bg" style={{ maxHeight: '100px' }} navbarScroll>
+                            <NavDropdown title="productos" className="categoria" id="dropdown-basic">
+                                <NavDropdown.Item as={NavLink} to="/">Todos los productos</NavDropdown.Item>
+                                {categories.map((cat, index) => (
+                                    <NavDropdown.Item key={index} as={NavLink} to={`/category/${cat}`}>{cat}</NavDropdown.Item>
+                                ))}
+                            </NavDropdown>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+        </div>
     );
-
-}
+};
 
 export default NavBar;

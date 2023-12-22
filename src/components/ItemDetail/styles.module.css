@@ -1,6 +1,33 @@
-.cardContainer {
-    width: 100vw;
+.card {
+
+    margin-top: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
+    border-radius: 8px;
+    gap: 10px;
+}
+
+.cardImagen {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.cardDetalles {
+    flex: 1;
+    padding-left: 20px;
+}
+
+.precio {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.acciones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.25rem;
 }

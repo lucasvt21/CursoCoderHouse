@@ -1,24 +1,46 @@
+import { useContext, useState } from "react";
+import styles from "./styles.module.css";
+import { Link } from "react-router-dom";
+import ItemCount from "../ItemCount/ItemCount";
+import { CartContext } from "../../context/cartContext";
 
-import ItemCount from '../itemCount/itemCount';
-import styles from './styles.module.css'
+const ItemDetail = ({ product }) => {
+    const [cantidad, setCantidad] = useState(1);
+    const { addToCart } = useContext(CartContext);
 
-export const ItemDetail = ({ description, img, price, stock, name }) => {
-    const onAdd = (items) => {
-        alert(`Se agrego ${items} al carrito`)
-    }
+    const handleAddToCart = () => {
+        addToCart(product, cantidad);
+
+    };
 
     return (
-        <div className={styles.cardContainer}>
-            <div className="card">
-                <div className="card-body">
-                <h5 className="card-title">{name}</h5>
-                    <img src={img} alt="" />
-                    <p className="card-text">{description}</p>
-                    <p> Precio: ${price}</p>
-                    <p>stock: {stock}</p>
-                    <ItemCount stock={stock}/>
+        <div className={styles.container}>
+            {product && (
+                <div className={styles.card}>
+                    <img className={styles.cardImagen} src={product.img} alt={product.title} />
+                    <div className={styles.cardDetalles}>
+                        <h3>{product.title}</h3>
+                        <p className={styles.descripcion}>{product.description}</p>
+                        <p>Stock: {product.stock}</p>
+                        <p className={styles.precio}>${product.price}</p>
+                        <ItemCount
+                            contador={cantidad}
+                            setContador={setCantidad}
+                            stock={product.stock}
+                        />
+                        <div className={styles.acciones}>
+                            <button onClick={handleAddToCart}>
+                                Agregar al carrito
+                            </button>
+                            <Link to="/" className="Link">
+                                Volver
+                            </Link>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };
+
+export default ItemDetail;

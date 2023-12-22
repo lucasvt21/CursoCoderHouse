@@ -1,13 +1,20 @@
-import Badge from 'react-bootstrap/Badge';
+import { useContext } from 'react';
+import styles from './styles.module.css';
 import Button from 'react-bootstrap/Button';
-import styles from "./styles.module.css";
+import { Link } from 'react-router-dom';
+import {CartContext} from '../../context/cartContext';
 
 const CartWidget = () => {
+
+    const {quantityInCart} = useContext(CartContext)
+
     return (
-        <Button>
-            <i className="bi bi-cart-fill"></i>
-            <Badge >11</Badge>
-        </Button>
+        <Link to="/Cart" className={styles.botonCarrito}>
+            <Button variant="transparent">
+                <i className="bi bi-bag-fill icono-carrito"></i>
+                <span className={styles.numero}>{quantityInCart()}</span>
+            </Button>
+        </Link>
     );
 }
 

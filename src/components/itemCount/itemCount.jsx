@@ -1,23 +1,22 @@
-import React, { useState } from 'react';
+import styles from './styles.module.css';
 
-const ItemCount = ({ stock }) => {
-    const [count, setCount] = useState(1);
+const ItemCount = ({ contador, setContador, stock }) => {
+    const incrementarContador = () => {
+        contador < stock && setContador(contador + 1);
+    }
 
-    const sumar = () => {
-    count < stock && setCount(count + 1);
-    };
-
-    const restar = () => {
-        count > 1 && setCount(count - 1);
-    };
+    const disminuirContador = () => {
+        contador > 1 && setContador(contador - 1);
+    }
 
     return (
         <div>
-            <button onClick={sumar}>+</button>
-            <span>{count}</span>
-            <button onClick={restar}>-</button>
+            <button onClick={disminuirContador}>-</button>
+            <span className={styles.valorContador}>{contador}</span>
+            <button onClick={incrementarContador}>+</button>
         </div>
-    );
-};
+    )
+}
 
 export default ItemCount;
+
